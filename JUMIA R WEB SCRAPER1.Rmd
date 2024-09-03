@@ -1,0 +1,82 @@
+---
+title: "JUMIA R WEB SCRAPER"
+author: "SHADRACK YEGON"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+
+### Functions Used
+* read_html()-creates html document from a url/link
+* html_nodes()-selects part of a document using css selectors
+* html text()-extract text from selected nodes
+* html_table()-extract table from selected nodes
+* View()-Used for printing the table
+
+### Data Source:
+Click [here](https://www.jumia.co.ke/catalog/?q=sumsung+smartphones&page=1#catalog-listing) to open jumia website
+
+### Load the  libraries
+```{r,message=FALSE}
+library(tidyverse)
+library(rvest)
+library(gtExtras)
+
+```
+## 1.Webscraping Name and Price of the first 10(out of 40) Different sumsung smartphones from a page 
+```{r}
+link=("https://www.jumia.co.ke/catalog/?q=sumsung+smartphones&page=1#catalog-listing")
+  page=read_html(link)
+  Name<-page %>% html_nodes(".info .name") %>% html_text()
+  Price<-page %>% html_nodes(".info .prc") %>% html_text()
+  df<-data.frame(Name,Price) %>% head(10)
+  df %>% gt() %>% tab_header(title="Sumsung Smartphones") %>% 
+    cols_align("left")
+  
+
+```
+
+
+
+## 2.Web scarping the first 50(out of 200) rows from multiple pages(1-5)
+```{r}
+df=data.frame()
+for (page_no in c(1:5)){
+  link=paste0("https://www.jumia.co.ke/catalog/?q=sumsung+smartphones&page=",page_no,"#catalog-listing")
+  page=read_html(link)
+  Name<-page %>% html_nodes(".info .name") %>% html_text()
+  Price<-page %>% html_nodes(".info .prc") %>% html_text() 
+  page_no=print(paste("page",page_no))
+  df=rbind(df,data.frame(Name,Price)) %>% head(50)
+  
+}
+df %>% gt() %>% tab_header(title="Sumsung Smartphones") %>% 
+    cols_align("left")
+
+```
+
+
+
+## 3.Separating the "Name" column into 4 columns
+```{r warning=FALSE}
+df=data.frame()
+for (page_no in c(1:5)){
+  link=paste0("https://www.jumia.co.ke/catalog/?q=sumsung+smartphones&page=",page_no,"#catalog-listing")
+  page=read_html(link)
+  Name<-page %>% html_nodes(".info .name") %>% html_text()
+  Price<-page %>% html_nodes(".info .prc") %>% html_text() 
+  page_no=print(paste("page",page_no))
+  df=rbind(df,data.frame(Name,Price)) %>% head(50)
+  
+}
+df %>% separate(Name,c("Model","Inches","Storage_capacity","Battery"),
+                sep=",") %>%
+  gt() %>% tab_header(title="Sumsung Smartphones") %>% 
+    cols_align("left")
+
+ 
+```
+
+
