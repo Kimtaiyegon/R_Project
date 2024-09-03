@@ -3,8 +3,9 @@ title: "JUMIA R WEB SCRAPER"
 author: "SHADRACK YEGON"
 date: "`r Sys.Date()`"
 output:
-  html_document: default
   pdf_document: default
+  word_document: default
+  html_document: default
 ---
 
 
