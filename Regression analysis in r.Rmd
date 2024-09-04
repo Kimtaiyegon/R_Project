@@ -1,0 +1,73 @@
+---
+title: "Regression Analysis in R"
+author: "Yegon Shadrack"
+date: "2024-09-04"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## 1.Simple linear regression 
+
+### Load the data
+```{r }
+library(tidyverse)
+library(ggplot2)
+```
+
+### Load the data
+The data comes from car dataset showing the car speed  and the stopping distance(dist)
+```{r}
+cars %>% head(5)
+```
+
+### Create the Model
+```{r}
+cars %>% lm(dist~speed,data=.) %>% summary()
+```
+
+### Findings
+1. P-value associated with F-statistics is very small showing that at least one of the predictor variable is significant predictor of Outcome variable.
+
+2. R-squared=0.65,Indicates that 65% of the change in stopping distance can be explained by explained by the change in speed.
+ 
+### conclusion 
+ model: dist=-17.58+3.93(speed)
+Increasing the speed of the car by 1 unit increases the car stopping distance by 3.93 ft
+
+
+## 2.Multiple linear regression
+
+### Load the data
+The data is from Trees dataset and it shows the  Diameter(girth), Height and Volume for Black Cherry Trees.
+I wanted to investigate whether there is any relationship between Volume,diameter(girth)  and height.
+```{r}
+trees %>% head(5)
+```
+
+### Create the Model
+```{r}
+trees %>% lm(Volume~Girth+Height,data=.) %>% summary()
+```
+### Findings
+1. P-value associated with F-statistics is less than 0.5,showing that at least one of the predictor variable is significant.
+
+2. Individual p-values of the coefficients are all significant indicating that height and girth is significant predictor of volume.
+
+3. Adjusted R-squared=0.94,showing that 94% of the change in volume can be explained by both the change in  girth and height.
+
+### Conclusions
+model: Volume=-57.99+4.71(Girth)+0.34(Height)
+
+* keeping other factors constant,1 inch increase in Girth results in 4.71 cubic ft increase in volume
+* Also ,keeping girth constant,a one unit increase in height ,increases the volume by 0.33 cubic ft
+
+
+
+
+
+
